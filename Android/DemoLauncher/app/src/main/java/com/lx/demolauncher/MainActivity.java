@@ -3,11 +3,14 @@ package com.lx.demolauncher;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.util.LongSparseArray;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -17,7 +20,16 @@ public class MainActivity extends ActionBarActivity {
     setContentView(R.layout.activity_main);
 
     Log.d("lx", "lxDemoLauncher , onCreate");
+    boolean lx = false;
+    testHashMapAndSparseArray();
+    if(!lx){
+      Intent it = new Intent(this, Welcome.class);
+      startActivity(it);
+      finish();
+      return;
+    }
 
+    Log.d("lx", "can you");
     findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         dispatchTakePictureIntent();
@@ -79,5 +91,37 @@ public class MainActivity extends ActionBarActivity {
     if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
       startActivityForResult(takePictureIntent, 1);
     }
+  }
+
+  private void testHashMapAndSparseArray(){
+    HashMap<Long, Info> hashMapA = new HashMap<>();
+    HashMap<Long, Info> hashMapB = new HashMap<>();
+
+    ArrayList<Info> a = new ArrayList<>();
+    for(int i= 0; i<3; i++){
+      Info x = new Info();
+      x.value = i;
+      hashMapA.put(new Long(i), x);
+    }
+    hashMapB.putAll(hashMapA);
+
+    for(Info z: hashMapA.values()){ z.value += 100;}
+    Log.d("LXhashmap", hashMapA.toString());
+    Log.d("LXhashmap", hashMapB.toString());
+
+    LongSparseArray<Info> sparseArrayA = new LongSparseArray<>();
+    LongSparseArray<Info> sparseArrayB = new LongSparseArray<>();
+    for(int i= 0; i<3; i++){
+      Info x = new Info();
+      x.value = i;
+      sparseArrayA.put(new Long(i), x);
+    }
+
+    sparseArrayB = sparseArrayA.clone();
+      for(int i= 0; i<3; i++){
+        sparseArrayA.valueAt(i).value += 200;
+      }
+    Log.d("LXsparsearray", sparseArrayA.toString());
+    Log.d("LXsparsearray", sparseArrayB.toString());
   }
 }
